@@ -18,6 +18,15 @@ app.use(express.json());
 
 // createProductCard(products);
 
+const cors = require("cors");
+const corsOptions = {
+  origin: "*",
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
 async function createProductCard(newProducts) {
   try {
     const products = new ProductCard(newProducts);
@@ -61,6 +70,64 @@ app.get("/products", async (req, res) => {
     res.status(505).json({ error: "Failed to fetch the products" });
   }
 });
+
+async function wishlistedProducts() {
+  try {
+    const products = await ProductCard.find({ isWishlisted: true });
+    return products;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+app.get("/products/wishlisted", async (req, res) => {
+  try {
+    const products = await wishlistedProducts();
+    if (products.length != 0) {
+      res.json(products);
+    } else {
+      res.status(404).json({ error: "No products found" });
+    }
+  } catch (error) {
+    res.status(404).json({ error: "Failed to fetch the products." });
+  }
+});
+
+async function wishlistProducts(productId, dataToUpdate) {
+  try {
+    const wishlistedProducts = await ProductCard.findByIdAndUpdate(
+      productId,
+      dataToUpdate,
+      { new: true }
+    );
+    return wishlistedProducts;
+  } catch (error) {
+    console.log("Error in wishlisting the product.", error);
+  }
+}
+
+app.post("/products/:productId/wishlist", async (req, res) => {
+  try {
+    const wishlistedProducts = await wishlistProducts(
+      req.params.productId,
+      req.body
+    );
+    if (wishlistedProducts) {
+      res
+        .status(200)
+        .json({
+          message: "Product added to wishlist successfully.",
+          wishlistedProduct: wishlistedProducts,
+        });
+    } else {
+        res.status(404).json({error: "Product not found"})
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add the product to wishlist" });
+  }
+});
+
+
 
 const PORT = 3000;
 app.listen(PORT, () => {
