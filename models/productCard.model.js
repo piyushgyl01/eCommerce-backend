@@ -163,7 +163,11 @@ const ProductCardSchema = new mongoose.Schema({
   },
   productSize: [
     {
-      size: { type: String, enum: ["XS", "S", "M", "L", "XL", "XXL"], required: true },
+      size: {
+        type: String,
+        enum: ["XS", "S", "M", "L", "XL", "XXL"],
+        required: true,
+      },
     },
     // Changed from array of strings to array of objects to include size-specific details
     // Example: { size: "M", available: true, stockCount: 20 }
@@ -183,6 +187,15 @@ const ProductCardSchema = new mongoose.Schema({
     },
     // Changed from array of strings to array of objects for structured descriptions
     // Example: { title: "Display", details: "6.5-inch OLED display" }
+  ],
+  category: [
+    {
+      gender: {
+        type: String,
+        enum: ["Men", "Women", "Unisex"],
+        required: true,
+      },
+    },
   ],
 });
 
