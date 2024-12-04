@@ -5,412 +5,64 @@ const ProductCard = require("./models/productCard.model");
 
 initialiseDatabase();
 
-const products = [
-  {
-    productImg: "http://example.com/plush1.jpg",
-    isWishlisted: false,
-    productName: "Honkai: Star Rail Owlbert Plushie",
-    productPrice: 29.99,
-    actualPrice: 29.99,
-    discountPercentage: 0,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.5,
-    productQuantity: 5,
-    productSize: [{ size: "M" }],
-    productPerks: [
-      { perkName: "Free Shipping", perkIcon: "icon_shipping.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Soft cotton and polyester" },
-      { title: "Dimensions", details: "12 x 8 x 6 inches" },
-    ],
-  },
-  {
-    productImg: "http://example.com/keyboard1.jpg",
-    isWishlisted: true,
-    productName: "Shenhe: Lonesome Transcendence Keyboard",
-    productPrice: 269.99,
-    actualPrice: 299.99,
-    discountPercentage: 10,
-    isAddedToCart: false,
-    isBuyNow: true,
-    productRating: 5,
-    productQuantity: 2,
-    productSize: [],
-    productPerks: [
-      { perkName: "RGB Backlit", perkIcon: "icon_rgb.png" },
-      { perkName: "Warranty", perkIcon: "icon_warranty.png" },
-    ],
-    productDescription: [
-      { title: "Key Type", details: "Mechanical" },
-      { title: "Compatibility", details: "Windows and macOS" },
-    ],
-  },
-  {
-    productImg: "http://example.com/figure1.jpg",
-    isWishlisted: false,
-    productName: "Nicole Demara 1/7 Scale Figure",
-    productPrice: 239.99,
-    actualPrice: 239.99,
-    discountPercentage: 0,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.7,
-    productQuantity: 3,
-    productSize: [],
-    productPerks: [
-      { perkName: "Collector's Edition", perkIcon: "icon_collect.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "High-quality resin" },
-      { title: "Height", details: "12 inches" },
-    ],
-  },
-  {
-    productImg: "http://example.com/socks1.jpg",
-    isWishlisted: true,
-    productName: "House of Hearth Winter Socks",
-    productPrice: 29.99,
-    actualPrice: 39.99,
-    discountPercentage: 25,
-    isAddedToCart: true,
-    isBuyNow: false,
-    productRating: 4.3,
-    productQuantity: 7,
-    productSize: [{ size: "S" }, { size: "M" }, { size: "L" }],
-    productPerks: [{ perkName: "Soft Fabric", perkIcon: "icon_soft.png" }],
-    productDescription: [{ title: "Material", details: "Wool blend" }],
-  },
-  {
-    productImg: "http://example.com/plush2.jpg",
-    isWishlisted: false,
-    productName: "Fontaine Character Chibi Plush Doll",
-    productPrice: 49.99,
-    actualPrice: 59.99,
-    discountPercentage: 16,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.8,
-    productQuantity: 10,
-    productSize: [],
-    productPerks: [
-      { perkName: "Limited Edition", perkIcon: "icon_limited.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Soft and durable fabric" },
-      { title: "Care", details: "Hand washable" },
-    ],
-  },
-  {
-    productImg: "http://example.com/boots1.jpg",
-    isWishlisted: true,
-    productName: "Wriothesley Mid-Calf Boots",
-    productPrice: 179.99,
-    actualPrice: 199.99,
-    discountPercentage: 10,
-    isAddedToCart: false,
-    isBuyNow: true,
-    productRating: 4.6,
-    productQuantity: 4,
-    productSize: [{ size: "M" }, { size: "L" }],
-    productPerks: [
-      { perkName: "Waterproof", perkIcon: "icon_waterproof.png" },
-      { perkName: "Durable Sole", perkIcon: "icon_durable.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Leather and rubber" },
-      { title: "Style", details: "Mid-calf fit" },
-    ],
-  },
-  {
-    productImg: "http://example.com/gamepad1.jpg",
-    isWishlisted: false,
-    productName: "Firefly Elite Game Controller",
-    productPrice: 259.99,
-    actualPrice: 279.99,
-    discountPercentage: 7,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.9,
-    productQuantity: 5,
-    productSize: [],
-    productPerks: [
-      { perkName: "Haptic Feedback", perkIcon: "icon_haptic.png" },
-      { perkName: "Long Battery Life", perkIcon: "icon_battery.png" },
-    ],
-    productDescription: [
-      { title: "Compatibility", details: "PC and consoles" },
-    ],
-  },
-  {
-    productImg: "http://example.com/tshirt1.jpg",
-    isWishlisted: true,
-    productName: "Aeon T-shirt",
-    productPrice: 46.99,
-    actualPrice: 46.99,
-    discountPercentage: 0,
-    isAddedToCart: false,
-    isBuyNow: true,
-    productRating: 4.2,
-    productQuantity: 8,
-    productSize: [{ size: "S" }, { size: "M" }, { size: "L" }, { size: "XL" }],
-    productPerks: [
-      { perkName: "Breathable Fabric", perkIcon: "icon_breathable.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "100% Cotton" },
-      { title: "Fit", details: "Regular fit" },
-    ],
-  },
-  {
-    productImg: "http://example.com/goblet1.jpg",
-    isWishlisted: false,
-    productName: "Font of All Waters Goblet",
-    productPrice: 79.99,
-    actualPrice: 99.99,
-    discountPercentage: 20,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.4,
-    productQuantity: 6,
-    productSize: [],
-    productPerks: [
-      { perkName: "Handcrafted", perkIcon: "icon_handcrafted.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Ceramic" },
-      { title: "Capacity", details: "400ml" },
-    ],
-  },
-  {
-    productImg: "http://example.com/figure2.jpg",
-    isWishlisted: true,
-    productName: "Raiden Shogun Nendoroid Figure",
-    productPrice: 49.99,
-    actualPrice: 59.99,
-    discountPercentage: 16,
-    isAddedToCart: true,
-    isBuyNow: false,
-    productRating: 4.8,
-    productQuantity: 5,
-    productSize: [],
-    productPerks: [{ perkName: "Poseable", perkIcon: "icon_poseable.png" }],
-    productDescription: [
-      { title: "Material", details: "ABS Plastic" },
-      { title: "Height", details: "4 inches" },
-    ],
-  },
-
-  {
-    productImg: "http://example.com/teaSet.jpg",
-    isWishlisted: true,
-    productName: "Arlecchino Afternoon Tea Cup Set",
-    productPrice: 69.99,
-    actualPrice: 79.99,
-    discountPercentage: 12,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.7,
-    productQuantity: 4,
-    productSize: [],
-    productPerks: [
-      { perkName: "Elegant Design", perkIcon: "icon_elegant.png" },
-      { perkName: "Microwave Safe", perkIcon: "icon_microwave.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Porcelain" },
-      { title: "Includes", details: "Cup and saucer" },
-    ],
-  },
-  {
-    productImg: "http://example.com/backpack.jpg",
-    isWishlisted: false,
-    productName: "Wriothesley Shoulder Backpack",
-    productPrice: 144.9,
-    actualPrice: 159.9,
-    discountPercentage: 10,
-    isAddedToCart: true,
-    isBuyNow: false,
-    productRating: 4.5,
-    productQuantity: 6,
-    productSize: [],
-    productPerks: [
-      { perkName: "Water-Resistant", perkIcon: "icon_water_resistant.png" },
-      { perkName: "Multiple Compartments", perkIcon: "icon_compartments.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Durable nylon" },
-      { title: "Capacity", details: "30 liters" },
-    ],
-  },
-  {
-    productImg: "http://example.com/keyboard2.jpg",
-    isWishlisted: true,
-    productName: "Kafka RGB Mechanical Keyboard",
-    productPrice: 249.99,
-    actualPrice: 269.99,
-    discountPercentage: 7,
-    isAddedToCart: false,
-    isBuyNow: true,
-    productRating: 4.9,
-    productQuantity: 3,
-    productSize: [],
-    productPerks: [
-      { perkName: "Anti-Ghosting Keys", perkIcon: "icon_anti_ghosting.png" },
-      { perkName: "RGB Customization", perkIcon: "icon_rgb.png" },
-    ],
-    productDescription: [
-      { title: "Key Type", details: "Mechanical" },
-      { title: "Cable Type", details: "USB-C" },
-    ],
-  },
-  {
-    productImg: "http://example.com/tshirt2.jpg",
-    isWishlisted: false,
-    productName: "March 7th School Uniform Bag",
-    productPrice: 189.99,
-    actualPrice: 199.99,
-    discountPercentage: 5,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.6,
-    productQuantity: 10,
-    productSize: [],
-    productPerks: [
-      { perkName: "Classic Design", perkIcon: "icon_classic.png" },
-    ],
-    productDescription: [{ title: "Material", details: "Polyester blend" }],
-  },
-  {
-    productImg: "http://example.com/plush3.jpg",
-    isWishlisted: false,
-    productName: "Lordly Trashcan Blind Bag Toy",
-    productPrice: 19.99,
-    actualPrice: 24.99,
-    discountPercentage: 20,
-    isAddedToCart: true,
-    isBuyNow: false,
-    productRating: 4.3,
-    productQuantity: 7,
-    productSize: [],
-    productPerks: [
-      { perkName: "Mystery Figure", perkIcon: "icon_mystery.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "PVC" },
-      { title: "Height", details: "3 inches" },
-    ],
-  },
-  {
-    productImg: "http://example.com/mug.jpg",
-    isWishlisted: true,
-    productName: "Fontaine Character Mug",
-    productPrice: 29.99,
-    actualPrice: 34.99,
-    discountPercentage: 14,
-    isAddedToCart: false,
-    isBuyNow: true,
-    productRating: 4.5,
-    productQuantity: 5,
-    productSize: [],
-    productPerks: [
-      { perkName: "Dishwasher Safe", perkIcon: "icon_dishwasher.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Ceramic" },
-      { title: "Capacity", details: "300ml" },
-    ],
-  },
-  {
-    productImg: "http://example.com/plush4.jpg",
-    isWishlisted: false,
-    productName: "Sigewinne Plush Doll",
-    productPrice: 49.99,
-    actualPrice: 59.99,
-    discountPercentage: 16,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.8,
-    productQuantity: 8,
-    productSize: [],
-    productPerks: [{ perkName: "Soft Material", perkIcon: "icon_soft.png" }],
-    productDescription: [
-      { title: "Material", details: "Plush fabric" },
-      { title: "Dimensions", details: "10 x 6 x 4 inches" },
-    ],
-  },
-  {
-    productImg: "http://example.com/ornament.jpg",
-    isWishlisted: true,
-    productName: "Tartaglia Spring Ornament",
-    productPrice: 45.99,
-    actualPrice: 49.99,
-    discountPercentage: 8,
-    isAddedToCart: true,
-    isBuyNow: false,
-    productRating: 4.4,
-    productQuantity: 6,
-    productSize: [],
-    productPerks: [
-      { perkName: "Customizable Pose", perkIcon: "icon_customizable.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Resin" },
-      { title: "Includes", details: "Base stand" },
-    ],
-  },
-  {
-    productImg: "http://example.com/scarf.jpg",
-    isWishlisted: false,
-    productName: "Kaedehara Kazuha Scarf",
-    productPrice: 72.9,
-    actualPrice: 79.99,
-    discountPercentage: 9,
-    isAddedToCart: false,
-    isBuyNow: false,
-    productRating: 4.7,
-    productQuantity: 4,
-    productSize: [],
-    productPerks: [
-      { perkName: "Warm and Comfortable", perkIcon: "icon_warm.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "Wool blend" },
-      { title: "Length", details: "6 feet" },
-    ],
-  },
-  {
-    productImg: "http://example.com/figure3.jpg",
-    isWishlisted: true,
-    productName: "Dan Heng 1/7 Scale Figure",
-    productPrice: 219.99,
-    actualPrice: 249.99,
-    discountPercentage: 12,
-    isAddedToCart: false,
-    isBuyNow: true,
-    productRating: 4.9,
-    productQuantity: 2,
-    productSize: [],
-    productPerks: [
-      { perkName: "Collector's Item", perkIcon: "icon_collect.png" },
-    ],
-    productDescription: [
-      { title: "Material", details: "High-quality resin" },
-      { title: "Height", details: "14 inches" },
-    ],
-  },
-];
-
 app.use(express.json());
+
+// async function createProductCard(newProducts) {
+//   try {
+//     const products = await ProductCard.insertMany(newProducts);
+//     console.log(products);
+//   } catch (error) {
+//     console.log("Error saving events:", error);
+//   }
+// }
+
+// createProductCard(products);
 
 async function createProductCard(newProducts) {
   try {
-    const products = await ProductCard.insertMany(newProducts);
-    console.log(products);
+    const products = new ProductCard(newProducts);
+    const savedProduct = await products.save();
+    console.log("saved: ", savedProduct);
+    return savedProduct;
   } catch (error) {
     console.log("Error saving events:", error);
   }
 }
 
-createProductCard(products);
+app.post("/products", async (req, res) => {
+  try {
+    const products = await createProductCard(req.body);
+    res
+      .status(201)
+      .json({ message: "product saved successfully", product: products });
+  } catch (error) {
+    res.status(404).json({ error: "failed to get the products." });
+  }
+});
+
+async function readAllProducts() {
+  try {
+    const products = await ProductCard.find();
+    return products;
+  } catch (error) {
+    console.log("error fetching the data", error);
+  }
+}
+
+app.get("/products", async (req, res) => {
+  try {
+    const products = await readAllProducts();
+    if (products.length != 0) {
+      res.json(products);
+    } else {
+      res.status(404).json({ error: "No Products found" });
+    }
+  } catch (error) {
+    res.status(505).json({ error: "Failed to fetch the products" });
+  }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`);
+});
