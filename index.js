@@ -71,6 +71,28 @@ app.get("/products", async (req, res) => {
   }
 });
 
+async function readProductsById(productId) {
+  try {
+    const product = await Address.findById(productId);
+    return product;
+  } catch (error) {
+    console.log(`Error while reading the products ${error}`);
+  }
+}
+
+app.get("/products/:productId", async (req, res) => {
+  try {
+    const product = await readProductsById(req.params.productId);
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json("No product found.");
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get the products through id." });
+  }
+});
+
 async function wishlistedProducts() {
   try {
     const products = await ProductCard.find({ isWishlisted: true });
