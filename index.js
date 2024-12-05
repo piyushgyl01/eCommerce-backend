@@ -188,7 +188,7 @@ app.get("/products/raitngs/:rating", async (req, res) => {
     if (products != 0) {
       res.json(products);
     } else {
-        res.status(404).json("No product found")
+      res.status(404).json("No product found");
     }
   } catch (error) {
     res
@@ -238,6 +238,84 @@ app.get("/products/sort/price-desc", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch products" });
   }
 });
+
+const Profile = require("./models/profile.model");
+
+// async function createProfile(newProfile) {
+//   try {
+//     const profile = await Profile.insertMany(newProfile);
+//     console.log(profile);
+//   } catch (error) {
+//     console.log(`Error creating a profile ${error}`);
+//   }
+// }
+
+// createProfile(profile);
+
+async function postProfile(newProfile) {
+  try {
+    const profile = new Profile(newProfile);
+    const savedProfile = await profile.save();
+    return savedProfile;
+  } catch (error) {
+    console.log("Error creating a profile:", error);
+    throw error;
+  }
+}
+
+app.post("/profile", async (req, res) => {
+  try {
+    const { firstName, lastName, email, address, phoneNumber } = req.body;
+
+    if (!firstName || !lastName || !email || !address || !phoneNumber) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const profile = await postProfile({
+      firstName,
+      lastName,
+      email,
+      address,
+      phoneNumber,
+    });
+
+    res.status(201).json({ message: "profile created successfully.", profile });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "Failed to create the profile", details: error.message });
+  }
+});
+
+const Address = require("./models/address.model");
+
+// async function createAddress(newAddress) {
+//   try {
+//     const addresses = await Address.insertMany(newAddress);
+//     console.log(addresses);
+//   } catch (error) {
+//     console.log(`Error creating a address ${error}`);
+//   }
+// }
+
+// createAddress(combinedAddresses);
+
+async function getAllAddresses() {
+  try {
+    const addresses = await Address.find();
+    return addresses
+  } catch (error) {
+    console.log(`Error getting all addresses ${error}`);
+  }
+}
+
+app.get("/addresses", async (req, res) => {
+    try {
+        
+    } catch (error) {
+        res.status(500).json({error: "Failed to get the addresses"})
+    }
+})
 
 const PORT = 3000;
 app.listen(PORT, () => {
