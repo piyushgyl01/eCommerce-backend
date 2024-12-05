@@ -303,19 +303,73 @@ const Address = require("./models/address.model");
 async function getAllAddresses() {
   try {
     const addresses = await Address.find();
-    return addresses
+    return addresses;
   } catch (error) {
     console.log(`Error getting all addresses ${error}`);
   }
 }
 
 app.get("/addresses", async (req, res) => {
-    try {
-        
-    } catch (error) {
-        res.status(500).json({error: "Failed to get the addresses"})
+  try {
+    const addresses = await getAllAddresses();
+    if (addresses.length != 0) {
+      res
+        .status(200)
+        .json({ message: "All the addresses", address: addresses });
+    } else {
+      res.status(404).json({ error: "No addresses found." });
     }
-})
+  } catch (error) {
+    res.status(500).json({ error: "Failed to get the addresses" });
+  }
+});
+
+async function editAddress(addressId, dataToUpdate) {
+  try {
+    const editAddresses = await Address.findByIdAndUpdate(
+      addressId,
+      dataToUpdate,
+      { new: true }
+    );
+    return editAddresses;
+  } catch (error) {}
+}
+
+app.post("/addresses/:addressId", async (req, res) => {
+  try {
+    const editedAddress = await editAddress(req.params.addressId, req.body);
+    if (editAddress) {
+      res.status(200).json({
+        message: "Address edited successfully",
+        editedAddress: editedAddress,
+      });
+    } else {
+      res.status(404).json({ error: "Failed to edit the address." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to edit the address." });
+  }
+});
+
+async function deleteAddressById(addressId) {
+  try {
+    const deletedAddress = await Address.findByIdAndDelete(addressId);
+    return deletedAddress;
+  } catch (error) {
+    console.log("Error deleting tbe address", error);
+  }
+}
+
+app.delete("/addresses/:addressId", async (req, res) => {
+  try {
+    const deletedAddress = await deleteAddressById(req.params.addressId);
+    res
+      .status(200)
+      .json({ message: "Address deleted successfully.", deletedAddress });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete the address." });
+  }
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {
