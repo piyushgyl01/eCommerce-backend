@@ -73,7 +73,7 @@ app.get("/products", async (req, res) => {
 
 async function readProductsById(productId) {
   try {
-    const product = await Address.findById(productId);
+    const product = await ProductCard.findById(productId);
     return product;
   } catch (error) {
     console.log(`Error while reading the products ${error}`);
