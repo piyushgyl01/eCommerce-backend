@@ -204,9 +204,9 @@ async function getProductByPrice(price) {
   }
 }
 
-app.get("/products/raitngs/:rating", async (req, res) => {
+app.get("/products/prices/:price", async (req, res) => {
   try {
-    const products = getProductByPrice(req.params.rating);
+    const products = getProductByPrice(req.params.price);
     if (products != 0) {
       res.json(products);
     } else {
