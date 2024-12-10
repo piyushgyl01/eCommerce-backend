@@ -195,29 +195,68 @@ app.post("/products/:productId/cart", async (req, res) => {
   }
 });
 
-async function getProductByPrice(price) {
+// async function getProductByPrice(price) {
+//   try {
+//     const products = await ProductCard.find({ productPrice: price });
+//     return products;
+//   } catch (error) {
+//     console.log(`Error getting products through price ${error}`);
+//   }
+// }
+
+// app.get("/products/prices/:price", async (req, res) => {
+//   try {
+//     const products = await getProductByPrice(req.params.price);
+//     if (products.length != 0) {
+//       res.json(products);
+//     } else {
+//       res.status(404).json("No product found");
+//     }
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ json: "Failed to fetch the pruduct of this price" });
+//   }
+// });
+
+// ... other requires
+
+// ... other routes
+
+async function getProductsByPriceRange(minPrice, maxPrice) {
   try {
-    const products = await ProductCard.find({ productPrice: price });
+    const products = await ProductCard.find({
+      productPrice: { $gte: minPrice, $lte: maxPrice },
+    });
     return products;
   } catch (error) {
-    console.log(`Error getting products through price ${error}`);
+    console.log(`Error getting products by price range: ${error}`);
+    throw error; // Re-throw the error to be handled by the calling function
   }
 }
 
-app.get("/products/prices/:price", async (req, res) => {
+app.get("/products/price", async (req, res) => {
   try {
-    const products = await getProductByPrice(req.params.price);
-    if (products.length != 0) {
+    const minPrice = parseFloat(req.query.minPrice);
+    const maxPrice = parseFloat(req.query.maxPrice);
+
+    if (isNaN(minPrice) || isNaN(maxPrice)) {
+      return res.status(400).json({ error: "Invalid price parameters" });
+    }
+
+    const products = await getProductsByPriceRange(minPrice, maxPrice);
+
+    if (products.length > 0) {
       res.json(products);
     } else {
-      res.status(404).json("No product found");
+      res.status(404).json({ message: "No products found in this price range" });
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({ json: "Failed to fetch the pruduct of this price" });
+    res.status(500).json({ error: "Failed to fetch products by price range" });
   }
 });
+
+// ... rest of your backend code
 
 async function getProductsByCategory(productCategory) {
   try {
