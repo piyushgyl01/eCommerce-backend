@@ -244,9 +244,34 @@ app.get("/products/categories/:productsCategory", async (req, res) => {
   }
 });
 
+// async function getProductByRating(productRating) {
+//   try {
+//     const products = await ProductCard.find({ productRating: productRating });
+//     return products;
+//   } catch (error) {
+//     console.log(`Error getting products through rating ${error}`);
+//   }
+// }
+
+// app.get("/products/ratings/:rating", async (req, res) => {
+//   try {
+//     const products = await getProductByRating(req.params.rating);
+//     if (products.length != 0) {
+//       res.json(products);
+//     } else {
+//       res.status(404).json("No product found");
+//     }
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ json: "Failed to fetch the pruduct of this rating" });
+//   }
+// });
+
 async function getProductByRating(productRating) {
   try {
-    const products = await ProductCard.find({ productRating: productRating });
+    // Changed to use $gte operator and convert rating to number
+    const products = await ProductCard.find({ productRating: { $gte: Number(productRating) } });
     return products;
   } catch (error) {
     console.log(`Error getting products through rating ${error}`);
@@ -256,15 +281,15 @@ async function getProductByRating(productRating) {
 app.get("/products/ratings/:rating", async (req, res) => {
   try {
     const products = await getProductByRating(req.params.rating);
-    if (products.length != 0) {
+    if (products && products.length > 0) {
       res.json(products);
     } else {
-      res.status(404).json("No product found");
+      res.status(404).json("No products found with this rating or higher");
     }
   } catch (error) {
     res
       .status(500)
-      .json({ json: "Failed to fetch the pruduct of this rating" });
+      .json({ error: "Failed to fetch products with this rating or higher" });
   }
 });
 
