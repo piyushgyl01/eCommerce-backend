@@ -207,7 +207,7 @@ async function getProductByPrice(price) {
 app.get("/products/prices/:price", async (req, res) => {
   try {
     const products = await getProductByPrice(req.params.price);
-    if (products != 0) {
+    if (products.length != 0) {
       res.json(products);
     } else {
       res.status(404).json("No product found");
@@ -216,6 +216,30 @@ app.get("/products/prices/:price", async (req, res) => {
     res
       .status(500)
       .json({ json: "Failed to fetch the pruduct of this rating" });
+  }
+});
+
+async function getProductsByCategory(productCategory) {
+  try {
+    const products = await ProductCard.find({ "category.gender": productCategory });
+    return products;
+  } catch (error) {
+    console.log(`Error getting products through category ${error}`);
+  }
+}
+
+app.get("/products/categories/:productsCategory", async (req, res) => {
+  try {
+    const products = await getProductsByCategory(req.params.productsCategory);
+    if (products.length != 0) {
+      res.json(products);
+    } else {
+      res.status(404).json("No products found")
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ json: "Failed to fetch the products through the category" });
   }
 });
 
