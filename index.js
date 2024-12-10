@@ -443,6 +443,56 @@ app.delete("/addresses/:addressId", async (req, res) => {
   }
 });
 
+app.get("/products/filter", async (req, res) => {
+  try {
+    const {
+      minPrice,
+      category,
+      rating,
+      sortBy
+    } = req.query;
+
+    // Start with an empty query object
+    let query = {};
+
+    // Add price filter if specified
+    if (minPrice && !isNaN(minPrice)) {
+      query.productPrice = { $gte: Number(minPrice) };
+    }
+
+    // Add category filter if specified
+    if (category && (category === 'Men' || category === 'Women')) {
+      query["category.gender"] = category;
+    }
+
+    // Add rating filter if specified
+    if (rating && !isNaN(rating)) {
+      query.productRating = { $gte: Number(rating) };
+    }
+
+    // Determine sort order
+    let sortOptions = {};
+    if (sortBy === 'lowToHigh') {
+      sortOptions = { productPrice: 1 };
+    } else if (sortBy === 'highToLow') {
+      sortOptions = { productPrice: -1 };
+    }
+
+    // Execute query with all filters
+    const products = await ProductCard.find(query).sort(sortOptions);
+
+    if (products.length > 0) {
+      res.json(products);
+    } else {
+      res.status(404).json({ error: "No products found matching the criteria" });
+    }
+  } catch (error) {
+    console.error("Error fetching filtered products:", error);
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+});
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
