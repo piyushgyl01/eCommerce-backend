@@ -152,20 +152,22 @@ async function cartProducts() {
     const productsInCart = await ProductCard.find({ isAddedToCart: true });
     return productsInCart;
   } catch (error) {
-    console.log(error);
+    console.error("Error in cartProducts:", error);
+    throw error;  // Re-throw the error to be caught by the route handler
   }
 }
 
-app.get("/products/inCart", async (req, res) => {
+app.get("/products/carts/inCart", async (req, res) => {
   try {
     const productsInCart = await cartProducts();
     if (productsInCart.length != 0) {
       res.json(productsInCart);
     } else {
-      res.status(404).json({ error: "No products found in the card." });
+      res.status(404).json({ error: "No products found in the cart." });
     }
   } catch (error) {
-    res.status(500).json({ json: "Failed to get the products in the cart." });
+    console.error("Error in /products/inCart:", error);
+    res.status(500).json({ error: "Failed to get the products in the cart." });
   }
 });
 
