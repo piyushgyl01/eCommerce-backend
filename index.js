@@ -215,7 +215,7 @@ app.get("/products/prices/:price", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ json: "Failed to fetch the pruduct of this rating" });
+      .json({ json: "Failed to fetch the pruduct of this price" });
   }
 });
 
