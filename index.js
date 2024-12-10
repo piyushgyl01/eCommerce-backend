@@ -195,51 +195,18 @@ app.post("/products/:productId/cart", async (req, res) => {
   }
 });
 
-// async function getProductByPrice(price) {
-//   try {
-//     const products = await ProductCard.find({ productPrice: price });
-//     return products;
-//   } catch (error) {
-//     console.log(`Error getting products through price ${error}`);
-//   }
-// }
-
-// app.get("/products/prices/:price", async (req, res) => {
-//   try {
-//     const products = await getProductByPrice(req.params.price);
-//     if (products.length != 0) {
-//       res.json(products);
-//     } else {
-//       res.status(404).json("No product found");
-//     }
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ json: "Failed to fetch the pruduct of this price" });
-//   }
-// });
-
-async function getProductByPrice(priceMin, priceMax) {
+async function getProductByPrice(price) {
   try {
-    const query = {};
-    if (!isNaN(priceMin)) {
-      query.productPrice = { $gte: priceMin };
-    }
-    if (!isNaN(priceMax)) {
-      query.productPrice = { ...query.productPrice, $lte: priceMax };
-    }
-    const products = await ProductCard.find(query);
+    const products = await ProductCard.find({ productPrice: price });
     return products;
   } catch (error) {
     console.log(`Error getting products through price ${error}`);
   }
 }
 
-app.get("/products/prices", async (req, res) => { 
+app.get("/products/prices/:price", async (req, res) => {
   try {
-    const priceMin = parseFloat(req.query.priceMin);
-    const priceMax = parseFloat(req.query.priceMax);
-    const products = await getProductByPrice(priceMin, priceMax);
+    const products = await getProductByPrice(req.params.price);
     if (products.length != 0) {
       res.json(products);
     } else {
@@ -248,7 +215,7 @@ app.get("/products/prices", async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ json: "Failed to fetch the product of this price" });
+      .json({ json: "Failed to fetch the pruduct of this price" });
   }
 });
 
