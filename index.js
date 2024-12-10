@@ -147,26 +147,23 @@ app.post("/products/:productId/wishlist", async (req, res) => {
   }
 });
 
+// Backend (index.js)
 async function cartProducts() {
   try {
     const productsInCart = await ProductCard.find({ isAddedToCart: true });
     return productsInCart;
   } catch (error) {
     console.error("Error in cartProducts:", error);
-    throw error;  // Re-throw the error to be caught by the route handler
+    throw error;
   }
 }
 
-app.get("/api/cart/items", async (req, res) => {
+app.get("/cart", async (req, res) => {  // Simplified route
   try {
     const productsInCart = await cartProducts();
-    if (productsInCart.length != 0) {
-      res.json(productsInCart);
-    } else {
-      res.status(404).json({ error: "No products found in the cart." });
-    }
+    res.json(productsInCart);  // Always return array, even if empty
   } catch (error) {
-    console.error("Error in /products/inCart:", error);
+    console.error("Error in /cart:", error);
     res.status(500).json({ error: "Failed to get the products in the cart." });
   }
 });
