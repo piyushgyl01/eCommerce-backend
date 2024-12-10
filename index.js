@@ -157,7 +157,7 @@ async function cartProducts() {
   }
 }
 
-app.get("/products/carts/inCart", async (req, res) => {
+app.get("/api/cart/items", async (req, res) => {
   try {
     const productsInCart = await cartProducts();
     if (productsInCart.length != 0) {
