@@ -442,6 +442,34 @@ app.delete("/addresses/:addressId", async (req, res) => {
   }
 });
 
+async function createAddress(addressData) {
+  try {
+    const address = new Address(addressData);
+    const savedAddress = await address.save();
+    return savedAddress;
+  } catch (error) {
+    console.log(`Error creating address ${error}`);
+  }
+}
+
+app.post("/addresses", async (req, res) => {
+  try {
+    const newAddress = await createAddress(req.body);
+    if (newAddress) {
+      res.status(201).json({
+        message: "Address created successfully",  
+        address: newAddress
+      });
+    } else {
+      res.status(404).json({ error: "Failed to create the address." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create the address." });
+  }
+});
+
+
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
